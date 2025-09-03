@@ -41,6 +41,7 @@ export const AuthProvider = ({ children }) => {
       const response = await apiService.login(username, password);
       if (response.user) {
         setUser(response.user);
+        // Store auth token if provided by backend
         return { success: true };
       }
     } catch (error) {
