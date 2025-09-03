@@ -1,10 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
+import { StatusBar } from 'expo-status-bar';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { StatusBar } from 'expo-status-bar';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
 // Screens
@@ -31,31 +30,18 @@ function MainTabs() {
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
-        tabBarIcon: ({ focused, color, size }) => {
+        tabBarIcon: ({ color, size }) => {
           let iconName;
-
-          if (route.name === 'Home') {
-            iconName = 'home';
-          } else if (route.name === 'Services') {
-            iconName = 'medical-services';
-          } else if (route.name === 'Appointments') {
-            iconName = 'calendar-today';
-          } else if (route.name === 'Profile') {
-            iconName = 'person';
-          }
-
+          if (route.name === 'Home') iconName = 'home';
+          else if (route.name === 'Services') iconName = 'medical-services';
+          else if (route.name === 'Appointments') iconName = 'calendar-today';
+          else if (route.name === 'Profile') iconName = 'person';
           return <Icon name={iconName} size={size} color={color} />;
         },
         tabBarActiveTintColor: '#007AFF',
         tabBarInactiveTintColor: 'gray',
         headerShown: false,
-        tabBarStyle: {
-          backgroundColor: 'white',
-          borderTopWidth: 1,
-          borderTopColor: '#E5E5E7',
-          paddingBottom: 5,
-          paddingTop: 5,
-        },
+        tabBarStyle: { backgroundColor: 'white', borderTopWidth: 1, borderTopColor: '#E5E5E7', paddingBottom: 5, paddingTop: 5 },
       })}
     >
       <Tab.Screen name="Home" component={HomeScreen} />
@@ -92,17 +78,12 @@ function MainStack() {
 function AppNavigator() {
   const { user, loading } = useAuth();
 
-  if (loading) {
-    return <LoadingScreen />;
-  }
+  if (loading) return <LoadingScreen />;
 
-  return (
-    <NavigationContainer>
-      {user ? <MainStack /> : <AuthStack />}
-    </NavigationContainer>
-  );
+  return <NavigationContainer>{user ? <MainStack /> : <AuthStack />}</NavigationContainer>;
 }
 
+// App Entry
 export default function App() {
   return (
     <SafeAreaProvider>
